@@ -1,4 +1,5 @@
 import { spawn, ChildProcess } from 'child_process';
+import * as vscode from 'vscode';
 
 export class PythonBridge {
     private process: ChildProcess | undefined;
@@ -10,9 +11,26 @@ export class PythonBridge {
     }
 
     private start() {
-        // Spawn agenticq serve --jsonrpc
-        this.process = spawn('agenticq', ['serve', '--jsonrpc'], {
+        const config = vscode.workspace.getConfiguration('agenticq');
+        const pythonPath = config.get<string>('pythonPath', 'python');
+
+        // Try spawning with configured python path + module invocation
+        this.process = spawn(pythonPath, ['-m', 'agenticq', 'serve', '--jsonrpc'], {
             stdio: ['pipe', 'pipe', 'pipe']
+        });
+
+        // Handle spawn errors (e.g., ENOENT if python not found)
+        this.process.on('error', (error) => {
+            console.error('Failed to spawn agenticq:', error);
+            vscode.window.showErrorMessage(
+                `AgenticQ: Failed to start Python backend. ` +
+                `Ensure Python and agenticq are installed. Error: ${error.message}`
+            );
+            // Reject all pending requests
+            for (const [id, pending] of this.pendingRequests.entries()) {
+                pending.reject(new Error('Python bridge failed to start'));
+                this.pendingRequests.delete(id);
+            }
         });
 
         if (this.process.stdout) {
@@ -36,6 +54,15 @@ export class PythonBridge {
                 console.error('Python bridge error:', data.toString());
             });
         }
+
+        this.process.on('exit', (code, signal) => {
+            console.log(`Python bridge exited with code ${code}, signal ${signal}`);
+            // Reject all pending requests
+            for (const [id, pending] of this.pendingRequests.entries()) {
+                pending.reject(new Error('Python bridge process exited'));
+                this.pendingRequests.delete(id);
+            }
+        });
     }
 
     private handleResponse(response: any) {

@@ -5,6 +5,10 @@
 ![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
+## 🎬 Demo
+
+![AgenticQ VS Code Extension Demo](../demos/gifs/demo1_vscode.gif)
+
 ## 🌟 Features
 
 ### 🔍 Smart Recommendations
@@ -15,19 +19,21 @@ Automatically analyzes your project and recommends relevant agents based on:
 - Databases (PostgreSQL, MongoDB, Redis)
 - Testing tools (pytest, Jest, etc.)
 
-### 📦 Browse 83 Plugins Across 12 Domains
-- 🐍 **Python Development** - FastAPI, Django, async patterns
-- ⚡ **JavaScript/TypeScript** - React, Node.js, web frameworks
-- 🔌 **Backend & APIs** - REST, GraphQL, microservices
-- ☁️ **DevOps & Cloud** - Kubernetes, CI/CD, infrastructure
-- 🔒 **Security** - Security scanning, compliance
-- 🤖 **Data & ML** - Data engineering, MLOps, LLM apps
-- 📚 **Documentation** - Technical docs, API docs
-- ✅ **Testing & QA** - Unit testing, TDD, performance
-- ⚙️ **Systems Programming** - Rust, Go, C/C++
-- 📈 **Business & Marketing** - Analytics, SEO
-- 🎭 **Agent Orchestration** - Multi-agent systems
-- 🎯 **Specialized** - Blockchain, game dev, trading
+### 📦 Browse 81 Plugins Across 12 Domains
+- 🐍 **Python Development** - FastAPI, Django, async patterns (9 agents, 16 skills)
+- ⚡ **JavaScript/TypeScript** - React, Node.js, web frameworks (7 agents, 17 skills)
+- 🔌 **Backend & APIs** - REST, GraphQL, microservices (15 agents, 10 skills)
+- ☁️ **DevOps & Cloud** - Kubernetes, CI/CD, infrastructure (15 agents, 16 skills)
+- 🔒 **Security** - Security scanning, compliance (8 agents, 5 skills)
+- 🤖 **Data & ML** - Data engineering, MLOps, LLM apps (9 agents, 16 skills)
+- 📚 **Documentation** - Technical docs, API docs (12 agents, 4 skills)
+- ✅ **Testing & QA** - Unit testing, TDD, performance (7 agents, 3 commands)
+- ⚙️ **Systems Programming** - Rust, Go, C/C++ (7 agents, 6 skills)
+- 📈 **Business & Marketing** - Analytics, SEO (10 agents, 7 skills)
+- 🎭 **Agent Orchestration** - Multi-agent systems (7 agents, 9 skills, 13 commands)
+- 🎯 **Specialized** - Blockchain, game dev, trading (9 agents, 16 skills)
+
+**Total: 81 plugins, 191 agents, 155 skills, 61 commands**
 
 ### 🎯 Multi-Harness Scaffolding
 Scaffold agents for multiple AI coding assistants:
@@ -40,23 +46,6 @@ Scaffold agents for multiple AI coding assistants:
 
 ### 🌐 Interactive Dashboard
 Built-in webview dashboard for browsing and managing agents.
-
-## 📸 Screenshots
-
-### Command Palette
-Access all AgenticQ features from the Command Palette (Ctrl+Shift+P / Cmd+Shift+P):
-
-![Command Palette](https://via.placeholder.com/800x200/1e1e1e/ffffff?text=AgenticQ+Commands)
-
-### Smart Recommendations
-Get personalized plugin recommendations based on your project:
-
-![Recommendations](https://via.placeholder.com/800x400/1e1e1e/ffffff?text=Smart+Recommendations)
-
-### Domain Browser
-Explore plugins organized by domain in the sidebar:
-
-![Domain Browser](https://via.placeholder.com/300x500/1e1e1e/ffffff?text=Domain+Browser)
 
 ## 🚀 Getting Started
 

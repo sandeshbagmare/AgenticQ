@@ -6,7 +6,22 @@ build-backend = "setuptools.build_meta"
 name = "agenticq"
 version = "0.1.0"
 description = "AgenticQ - Plugin and skill management system"
+readme = "README.md"
+license = {text = "MIT"}
 requires-python = ">=3.10"
+authors = [
+    {name = "Sandesh Bagmare", email = "sandesh@example.com"}
+]
+keywords = ["agent", "scaffolding", "ai", "claude", "cursor", "productivity"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
 dependencies = [
     "typer",
     "rich",
@@ -15,6 +30,12 @@ dependencies = [
     "jinja2",
     "pyyaml",
 ]
+
+[project.urls]
+Homepage = "https://github.com/sandeshbagmare/AgenticQ"
+Repository = "https://github.com/sandeshbagmare/AgenticQ"
+Issues = "https://github.com/sandeshbagmare/AgenticQ/issues"
+Documentation = "https://github.com/sandeshbagmare/AgenticQ#readme"
 
 [project.optional-dependencies]
 dev = [
@@ -30,6 +51,9 @@ agenticq = "agenticq.cli:app"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+agenticq = ["data/*.json"]
 
 [tool.black]
 line-length = 100

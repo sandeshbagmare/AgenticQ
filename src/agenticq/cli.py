@@ -14,6 +14,8 @@ from .core.classifier import classify_project
 from .core.recommender import recommend_plugins
 from .core.scaffolder import scaffold_plugins
 from .core.catalog import build_catalog
+from .core.runtime_builder import build_runtime_agent
+from .config import get_upstream_path, get_catalog_path, get_taxonomy_path
 
 app = typer.Typer(
     name="agenticq",
@@ -23,11 +25,9 @@ app = typer.Typer(
 console = Console()
 
 # Paths
-PROJECT_ROOT = Path(__file__).parent
-DATA_DIR = PROJECT_ROOT / "data"
-CATALOG_PATH = DATA_DIR / "catalog.json"
-TAXONOMY_PATH = DATA_DIR / "taxonomy.json"
-UPSTREAM_PATH = Path(r"C:\Users\sande\AppData\Local\Temp\wshobson-agents-research")
+CATALOG_PATH = get_catalog_path()
+TAXONOMY_PATH = get_taxonomy_path()
+UPSTREAM_PATH = get_upstream_path()
 
 
 def load_catalog():
@@ -216,6 +216,38 @@ def scaffold(
 
 
 @app.command()
+def build(
+    plugins: list[str] = typer.Argument(..., help="Plugin names to include in the agent"),
+    path: str = typer.Option(".", help="Project path to analyze"),
+    output: str = typer.Option(None, help="Output file path (default: agent-config.json)"),
+):
+    """Build a custom runtime agent from selected plugins."""
+    console.print("[cyan]Building runtime agent...[/cyan]\n")
+
+    profile = scan_project(path)
+    taxonomy = load_taxonomy()
+    catalog = load_catalog()
+
+    console.print(f"[bold]Project Profile:[/bold]")
+    console.print(f"  Languages: {', '.join(profile.languages) or 'none'}")
+    console.print(f"  Frameworks: {', '.join(profile.frameworks) or 'none'}\n")
+
+    try:
+        agent_config = build_runtime_agent(profile, plugins, catalog, taxonomy)
+
+        output_path = Path(output) if output else Path("agent-config.json")
+        output_path.write_text(json.dumps(agent_config, indent=2), encoding='utf-8')
+
+        console.print(f"[green]✓ Runtime agent built successfully[/green]")
+        console.print(f"\n[dim]Saved to: {output_path}[/dim]")
+        console.print(f"[dim]Plugins: {len(plugins)}[/dim]")
+        console.print(f"[dim]Total capabilities: {len(agent_config.get('capabilities', []))}[/dim]")
+    except Exception as e:
+        console.print(f"[red]✗ Error building agent: {e}[/red]")
+        raise typer.Exit(1)
+
+
+@app.command()
 def update():
     """Update catalog from upstream repository."""
     console.print("[cyan]Updating catalog from upstream...[/cyan]\n")
@@ -234,10 +266,44 @@ def update():
 
 
 @app.command()
-def gui():
-    """Launch web GUI."""
-    console.print("[cyan]Starting web GUI...[/cyan]")
-    console.print("[yellow]Web GUI not yet implemented. Use CLI commands for now.[/yellow]")
+def gui(
+    host: str = typer.Option("127.0.0.1", help="Host to bind the web server to"),
+    port: int = typer.Option(8080, help="Port to serve the web GUI on"),
+):
+    """Launch the standalone web GUI dashboard."""
+    if not CATALOG_PATH.exists():
+        console.print("[yellow]Catalog not found. Run 'agenticq update' first.[/yellow]")
+        raise typer.Exit(1)
+
+    from .server.web import WebServer
+
+    console.print(f"[cyan]Starting AgenticQ Web GUI at http://{host}:{port}[/cyan]")
+    console.print("[dim]Press Ctrl+C to stop.[/dim]")
+    WebServer().run(host=host, port=port)
+
+
+@app.command()
+def serve(
+    jsonrpc: bool = typer.Option(
+        False, "--jsonrpc", help="Run the JSON-RPC server over stdin/stdout (used by the VS Code extension)"
+    ),
+    host: str = typer.Option("127.0.0.1", help="Host for the HTTP server (when --jsonrpc is not set)"),
+    port: int = typer.Option(8080, help="Port for the HTTP server (when --jsonrpc is not set)"),
+):
+    """Run a backend server.
+
+    With --jsonrpc, speaks JSON-RPC 2.0 over stdin/stdout for the VS Code
+    extension. Without it, serves the HTTP API + web GUI.
+    """
+    if jsonrpc:
+        from .server.jsonrpc import JSONRPCServer
+
+        JSONRPCServer().run()
+    else:
+        from .server.web import WebServer
+
+        console.print(f"[cyan]Starting AgenticQ HTTP server at http://{host}:{port}[/cyan]")
+        WebServer().run(host=host, port=port)
 
 
 @app.command()

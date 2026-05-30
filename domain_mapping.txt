@@ -1,0 +1,14 @@
+| Domain | Icon | Plugins | Agents | Skills | Commands |
+|--------|------|---------|--------|--------|----------|
+| **Python Development** | 🐍 | 4 | 9 | 16 | 3 |
+| **JavaScript/TypeScript** | ⚡ | 3 | 7 | 17 | 4 |
+| **Backend & APIs** | 🔌 | 4 | 15 | 10 | 1 |
+| **DevOps & Cloud** | ☁️ | 4 | 15 | 16 | 0 |
+| **Security** | 🔒 | 4 | 8 | 5 | 2 |
+| **Data & ML** | 🤖 | 4 | 9 | 16 | 4 |
+| **Documentation** | 📚 | 4 | 12 | 4 | 1 |
+| **Testing & QA** | ✅ | 4 | 7 | 0 | 3 |
+| **Systems Programming** | ⚙️ | 3 | 7 | 6 | 0 |
+| **Business & Marketing** | 📈 | 5 | 10 | 7 | 3 |
+| **Agent Orchestration** | 🎭 | 4 | 7 | 9 | 13 |
+| **Specialized** | 🎯 | 5 | 9 | 16 | 0 |

@@ -6,7 +6,18 @@
 
 AgenticQ is a **CLI tool + Web GUI + VS Code extension** that helps you discover, recommend, and scaffold the right agents/skills/plugins for your project — minimizing token cost and maximizing AI output quality.
 
-The [wshobson/agents](https://github.com/wshobson/agents) marketplace contains **83 plugins**, **191 agents**, **155 skills**, and **102 commands** across multiple domains. AgenticQ makes it easy to find and install exactly what you need.
+The [wshobson/agents](https://github.com/wshobson/agents) marketplace contains **81 plugins**, **191 agents**, **155 skills**, and **61 commands** across 12 domains. AgenticQ makes it easy to find and install exactly what you need.
+
+## 🎬 Demo Videos
+
+### VS Code Extension
+![VS Code Extension Demo](demos/gifs/demo1_vscode.gif)
+
+### Web Interface
+![Web Interface Demo](demos/gifs/demo2_web.gif)
+
+### CLI Usage
+![CLI Demo](demos/gifs/demo3_cli.gif)
 
 ## Features
 
@@ -38,11 +49,11 @@ pip install -e .
 Clone the upstream marketplace and generate the catalog:
 
 ```bash
-# Clone the upstream repo
-git clone https://github.com/wshobson/agents.git /tmp/wshobson-agents-research
+# Clone the upstream repo (or set AGENTICQ_UPSTREAM env var)
+git clone https://github.com/wshobson/agents.git ~/.agenticq/upstream
 
-# Generate catalog (or run: agenticq update)
-python src/agenticq/core/catalog.py
+# Generate catalog
+agenticq update
 ```
 
 ## Quick Start
@@ -65,8 +76,17 @@ agenticq info python-development
 # Scaffold plugins into your project
 agenticq scaffold python-development unit-testing --harness claude-code
 
+# Build a custom runtime agent
+agenticq build python-development backend-development --output my-agent.json
+
 # Update catalog from upstream
 agenticq update
+
+# Launch web GUI
+agenticq gui
+
+# Show version
+agenticq version
 ```
 
 ### Example: Python FastAPI Project
@@ -89,10 +109,9 @@ agenticq recommend
 # ┌─────────────────────────┬───────┬────────┬──────────────────────────┐
 # │ Plugin                  │ Score │ Tokens │ Reason                   │
 # ├─────────────────────────┼───────┼────────┼──────────────────────────┤
-# │ python-development      │  90.0 │ 12,450 │ matches Python project   │
-# │ backend-development     │  85.0 │ 15,230 │ supports fastapi         │
-# │ api-testing-observ...   │  75.0 │  8,920 │ supports testing workflow│
-# │ unit-testing            │  70.0 │  6,340 │ supports testing workflow│
+# │ python-development      │  90.0 │ 30,218 │ matches Python project   │
+# │ backend-development     │  85.0 │ 26,426 │ supports fastapi         │
+# │ unit-testing            │  70.0 │  2,862 │ supports testing workflow│
 # └─────────────────────────┴───────┴────────┴──────────────────────────┘
 
 # Scaffold the top recommendations
@@ -115,12 +134,90 @@ agenticq gui
 3. Press F5 to launch Extension Development Host
 4. Use Command Palette: `AgenticQ: Get Recommendations`
 
+Or install from `.vsix`:
+```bash
+cd vscode-extension
+npm install
+npm run compile
+# Package with vsce (install with: npm install -g @vscode/vsce)
+vsce package
+code --install-extension agenticq-0.1.0.vsix
+```
+
+## Domain Coverage
+
+AgenticQ organizes 81 plugins into 12 domains, providing **191 agents**, **155 skills**, and **61 commands**:
+
+| Domain | Icon | Plugins | Agents | Skills | Commands |
+|--------|------|---------|--------|--------|----------|
+| **Python Development** | 🐍 | 4 | 9 | 16 | 3 |
+| **JavaScript/TypeScript** | ⚡ | 3 | 7 | 17 | 4 |
+| **Backend & APIs** | 🔌 | 4 | 15 | 10 | 1 |
+| **DevOps & Cloud** | ☁️ | 4 | 15 | 16 | 0 |
+| **Security** | 🔒 | 4 | 8 | 5 | 2 |
+| **Data & ML** | 🤖 | 4 | 9 | 16 | 4 |
+| **Documentation** | 📚 | 4 | 12 | 4 | 1 |
+| **Testing & QA** | ✅ | 4 | 7 | 0 | 3 |
+| **Systems Programming** | ⚙️ | 3 | 7 | 6 | 0 |
+| **Business & Marketing** | 📈 | 5 | 10 | 7 | 3 |
+| **Agent Orchestration** | 🎭 | 4 | 7 | 9 | 13 |
+| **Specialized** | 🎯 | 5 | 9 | 16 | 0 |
+
+### Domain Descriptions
+
+- **Python Development**: Modern Python with FastAPI, Django, async patterns
+- **JavaScript/TypeScript**: React, Node.js, and web frameworks
+- **Backend & APIs**: API design, GraphQL, REST, microservices
+- **DevOps & Cloud**: Kubernetes, CI/CD, cloud infrastructure
+- **Security**: Security scanning, compliance, secure coding
+- **Data & ML**: Data engineering, MLOps, LLM applications
+- **Documentation**: Technical docs, API docs, architecture diagrams
+- **Testing & QA**: Unit testing, TDD, performance testing
+- **Systems Programming**: Rust, Go, C/C++, embedded systems
+- **Business & Marketing**: Analytics, SEO, content marketing
+- **Agent Orchestration**: Multi-agent systems, context management
+- **Specialized**: Blockchain, game dev, trading, payments
+
+## CLI Reference
+
+### Commands
+
+| Command | Description | Options |
+|---------|-------------|---------|
+| `agenticq recommend` | Analyze project and recommend plugins | `--path` (project path)<br>`--domain` (filter by domain)<br>`--max-results` (limit) |
+| `agenticq browse` | Browse all domains and plugins | None |
+| `agenticq search <query>` | Search plugins, agents, and skills | Query string |
+| `agenticq info <plugin>` | Show detailed plugin information | Plugin name |
+| `agenticq scaffold <plugins...>` | Scaffold plugins into project | `--harness` (target harness)<br>`--target` (output directory) |
+| `agenticq build <plugins...>` | Build custom runtime agent | `--path` (project path)<br>`--output` (output file) |
+| `agenticq update` | Update catalog from upstream | None |
+| `agenticq gui` | Launch web dashboard | `--host` (bind address)<br>`--port` (port number) |
+| `agenticq serve` | Run backend server | `--jsonrpc` (JSON-RPC mode for VS Code) |
+| `agenticq version` | Show version information | None |
+
+### Environment Variables
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `AGENTICQ_UPSTREAM` | Path to wshobson/agents repository | `~/.agenticq/upstream` |
+
+### Supported Harnesses
+
+- **claude-code**: `.claude/plugins/` with agents/skills/commands
+- **cursor**: `.cursor-plugin/plugins/*.json` + `.cursor/rules/*.mdc`
+- **gemini**: `.gemini/` + `GEMINI.md`
+- **codex**: `.codex/agents/` + `.codex/skills/`
+- **opencode**: Similar to Claude Code
+- **copilot**: `.github/copilot/instructions.md`
+
 ## Architecture
 
 ```
 agenticq/
 ├── src/agenticq/
 │   ├── cli.py                    # Typer CLI entrypoint
+│   ├── config.py                 # Configuration helpers
+│   ├── __main__.py               # python -m agenticq support
 │   ├── core/
 │   │   ├── catalog.py            # Marketplace indexer
 │   │   ├── scanner.py            # Project tech-stack detector
@@ -146,29 +243,16 @@ agenticq/
 │   ├── src/
 │   │   ├── extension.ts
 │   │   ├── pythonBridge.ts
-│   │   └── domainTreeProvider.ts
+│   │   ├── domainTreeProvider.ts
+│   │   └── pluginsTreeProvider.ts
 │   └── package.json
+├── demos/                        # Demo GIF generators
+│   ├── render/                   # PIL-based rendering engine
+│   ├── demo1_vscode.py
+│   ├── demo2_web.py
+│   └── demo3_cli.py
 └── tests/                        # pytest test suite
 ```
-
-## Domain Taxonomy
-
-AgenticQ organizes the 83 plugins into 12 domains:
-
-| Domain | Icon | Plugins | Description |
-|--------|------|---------|-------------|
-| **Python Development** | 🐍 | 4 | Modern Python with FastAPI, Django, async patterns |
-| **JavaScript/TypeScript** | ⚡ | 3 | React, Node.js, and web frameworks |
-| **Backend & APIs** | 🔌 | 4 | API design, GraphQL, REST, microservices |
-| **DevOps & Cloud** | ☁️ | 4 | Kubernetes, CI/CD, cloud infrastructure |
-| **Security** | 🔒 | 4 | Security scanning, compliance, secure coding |
-| **Data & ML** | 🤖 | 4 | Data engineering, MLOps, LLM applications |
-| **Documentation** | 📚 | 4 | Technical docs, API docs, architecture diagrams |
-| **Testing & QA** | ✅ | 4 | Unit testing, TDD, performance testing |
-| **Systems Programming** | ⚙️ | 3 | Rust, Go, C/C++, embedded systems |
-| **Business & Marketing** | 📈 | 5 | Analytics, SEO, content marketing |
-| **Agent Orchestration** | 🎭 | 4 | Multi-agent systems, context management |
-| **Specialized** | 🎯 | 5 | Blockchain, game dev, trading, payments |
 
 ## How It Works
 
@@ -187,13 +271,9 @@ AgenticQ organizes the 83 plugins into 12 domains:
    - Dependency chains (plugins that pair well)
    - Conflict detection (overlapping agent roles)
 
-4. **Scaffolder** generates harness-specific output:
-   - **Claude Code**: `.claude/plugins/` with agents/skills/commands
-   - **Cursor**: `.cursor-plugin/plugins/*.json` + `.cursor/rules/*.mdc`
-   - **Gemini CLI**: `.gemini/` + `GEMINI.md`
-   - **Codex CLI**: `.codex/agents/` + `.codex/skills/`
-   - **OpenCode**: Similar to Claude Code
-   - **GitHub Copilot**: `.github/copilot/instructions.md`
+4. **Scaffolder** generates harness-specific output for your chosen AI coding assistant
+
+5. **Runtime Builder** creates custom agent configurations combining multiple plugins
 
 ## Testing
 
@@ -238,10 +318,10 @@ All plugin content is licensed under their respective licenses (MIT, Apache-2.0)
 
 - **Repository**: https://github.com/wshobson/agents
 - **Version**: 1.7.1
-- **Plugins**: 83
+- **Plugins**: 81
 - **Agents**: 191
 - **Skills**: 155
-- **Commands**: 102
+- **Commands**: 61
 
 ## License
 
@@ -273,10 +353,11 @@ Contributions are welcome! Please:
 - [ ] Plugin usage analytics
 - [ ] Integration with more harnesses
 - [ ] Web GUI deployment (Docker image)
-- [ ] VS Code Marketplace publication
+- [x] VS Code Marketplace publication
+- [x] Comprehensive demo videos
 
 ## Support
 
-- **Issues**: [GitHub Issues](https://github.com/your-repo/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/your-repo/discussions)
+- **Issues**: [GitHub Issues](https://github.com/sandeshbagmare/AgenticQ/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/sandeshbagmare/AgenticQ/discussions)
 - **Upstream Marketplace**: [wshobson/agents](https://github.com/wshobson/agents)

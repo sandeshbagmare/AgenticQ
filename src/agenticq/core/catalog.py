@@ -120,11 +120,11 @@ def build_catalog(upstream_repo: Path, output_path: Path) -> Dict[str, Any]:
             try:
                 plugin_data = index_plugin(plugin_dir, plugin_meta)
                 catalog["plugins"].append(plugin_data)
-                print(f"✓ Indexed {plugin_name}: {len(plugin_data['agents'])} agents, {len(plugin_data['skills'])} skills, {len(plugin_data['commands'])} commands")
+                print(f"[OK] Indexed {plugin_name}: {len(plugin_data['agents'])} agents, {len(plugin_data['skills'])} skills, {len(plugin_data['commands'])} commands")
             except Exception as e:
-                print(f"✗ Failed to index {plugin_name}: {e}")
+                print(f"[FAIL] Failed to index {plugin_name}: {e}")
         else:
-            print(f"⚠ Plugin directory not found: {plugin_dir}")
+            print(f"[WARN] Plugin directory not found: {plugin_dir}")
 
     # Write catalog
     output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -151,13 +151,23 @@ def build_catalog(upstream_repo: Path, output_path: Path) -> Dict[str, Any]:
 
 if __name__ == "__main__":
     import sys
+    import os
 
-    upstream = Path(r"C:\Users\sande\AppData\Local\Temp\wshobson-agents-research")
+    upstream = Path(os.getenv('AGENTICQ_UPSTREAM', Path.home() / '.agenticq' / 'upstream'))
     output = Path(__file__).parent.parent / "data" / "catalog.json"
 
     if not upstream.exists():
         print(f"Error: Upstream repo not found at {upstream}")
         print("Run: git clone https://github.com/wshobson/agents.git <path>")
+        print(f"Or set AGENTICQ_UPSTREAM environment variable to the repo path")
+        sys.exit(1)
+
+    try:
+        catalog = build_catalog(upstream, output)
+        print(f"\n[OK] Catalog built successfully")
+    except Exception as e:
+        print(f"\n[FAIL] Error building catalog: {e}")
+        sys.exit(1)
         sys.exit(1)
 
     try:

@@ -9,27 +9,52 @@ from ..core.scanner import scan_project
 from ..core.classifier import classify_project
 from ..core.recommender import recommend_plugins
 from ..core.scaffolder import scaffold_plugins
+from ..config import get_upstream_path, get_catalog_path, get_taxonomy_path
 
 
 class JSONRPCServer:
     """Simple JSON-RPC server for VS Code extension communication."""
 
     def __init__(self):
-        self.catalog_path = Path(__file__).parent.parent / "data" / "catalog.json"
-        self.taxonomy_path = Path(__file__).parent.parent / "data" / "taxonomy.json"
-        self.upstream_path = Path(r"C:\Users\sande\AppData\Local\Temp\wshobson-agents-research")
+        self.catalog_path = get_catalog_path()
+        self.taxonomy_path = get_taxonomy_path()
+        self.upstream_path = get_upstream_path()
+        self._catalog_cache = None
+        self._taxonomy_cache = None
 
     def load_catalog(self) -> Dict[str, Any]:
-        """Load catalog.json."""
+        """Load catalog.json with caching."""
+        if self._catalog_cache is not None:
+            return self._catalog_cache
+
         if not self.catalog_path.exists():
-            return {"plugins": []}
-        return json.loads(self.catalog_path.read_text(encoding='utf-8'))
+            return {
+                "jsonrpc": "2.0",
+                "error": {
+                    "code": -32603,
+                    "message": "Catalog not found. Run 'agenticq update' first."
+                }
+            }
+
+        self._catalog_cache = json.loads(self.catalog_path.read_text(encoding='utf-8'))
+        return self._catalog_cache
 
     def load_taxonomy(self) -> Dict[str, Any]:
-        """Load taxonomy.json."""
+        """Load taxonomy.json with caching."""
+        if self._taxonomy_cache is not None:
+            return self._taxonomy_cache
+
         if not self.taxonomy_path.exists():
-            return {"domains": []}
-        return json.loads(self.taxonomy_path.read_text(encoding='utf-8'))
+            return {
+                "jsonrpc": "2.0",
+                "error": {
+                    "code": -32603,
+                    "message": "Taxonomy not found. Run 'agenticq update' first."
+                }
+            }
+
+        self._taxonomy_cache = json.loads(self.taxonomy_path.read_text(encoding='utf-8'))
+        return self._taxonomy_cache
 
     def handle_request(self, request: Dict[str, Any]) -> Dict[str, Any]:
         """Handle a JSON-RPC request."""

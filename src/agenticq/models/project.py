@@ -7,6 +7,7 @@ from pydantic import BaseModel, Field
 class ProjectProfile(BaseModel):
     """Represents a detected project stack and configuration."""
 
+    project_path: str = Field(default=".")
     languages: List[str] = Field(default_factory=list)
     frameworks: List[str] = Field(default_factory=list)
     infrastructure: List[str] = Field(default_factory=list)

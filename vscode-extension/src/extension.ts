@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { PythonBridge } from './pythonBridge';
 import { DomainTreeProvider } from './domainTreeProvider';
+import { PluginsTreeProvider } from './pluginsTreeProvider';
 
 let pythonBridge: PythonBridge | undefined;
 
@@ -14,6 +15,59 @@ export function activate(context: vscode.ExtensionContext) {
     const domainProvider = new DomainTreeProvider(pythonBridge);
     vscode.window.registerTreeDataProvider('agenticqDomains', domainProvider);
 
+    const pluginsProvider = new PluginsTreeProvider(pythonBridge);
+    vscode.window.registerTreeDataProvider('agenticqPlugins', pluginsProvider);
+
+    // Check autoRecommend setting
+    const config = vscode.workspace.getConfiguration('agenticq');
+    const autoRecommend = config.get<boolean>('autoRecommend', false);
+
+    if (autoRecommend && vscode.workspace.workspaceFolders) {
+        // Trigger recommendations on activation
+        setTimeout(() => {
+            vscode.commands.executeCommand('agenticq.recommend');
+        }, 1000);
+    }
+
+    // Register scaffoldPlugin command (for tree item clicks)
+    context.subscriptions.push(
+        vscode.commands.registerCommand('agenticq.scaffoldPlugin', async (pluginName: string) => {
+            if (!vscode.workspace.workspaceFolders) {
+                vscode.window.showErrorMessage('No workspace folder open');
+                return;
+            }
+
+            const config = vscode.workspace.getConfiguration('agenticq');
+            const defaultHarness = config.get<string>('defaultHarness', 'claude-code');
+
+            const harness = await vscode.window.showQuickPick(
+                ['claude-code', 'cursor', 'gemini', 'codex', 'opencode', 'copilot'],
+                { placeHolder: `Select target harness for ${pluginName}` }
+            );
+
+            if (harness) {
+                const targetDir = vscode.workspace.workspaceFolders[0].uri.fsPath;
+
+                vscode.window.withProgress({
+                    location: vscode.ProgressLocation.Notification,
+                    title: `Scaffolding ${pluginName}...`,
+                    cancellable: false
+                }, async () => {
+                    try {
+                        const result = await pythonBridge?.scaffold([pluginName], harness, targetDir);
+                        if (result?.success) {
+                            vscode.window.showInformationMessage(`✓ ${result.message}`);
+                        } else {
+                            vscode.window.showErrorMessage(`✗ ${result?.message || 'Scaffolding failed'}`);
+                        }
+                    } catch (error) {
+                        vscode.window.showErrorMessage(`Error: ${error}`);
+                    }
+                });
+            }
+        })
+    );
+
     // Register commands
     context.subscriptions.push(
         vscode.commands.registerCommand('agenticq.scaffold', async () => {
@@ -24,9 +78,15 @@ export function activate(context: vscode.ExtensionContext) {
 
             if (plugins) {
                 const pluginList = plugins.split(',').map(p => p.trim());
+                const config = vscode.workspace.getConfiguration('agenticq');
+                const defaultHarness = config.get<string>('defaultHarness', 'claude-code');
+
                 const harness = await vscode.window.showQuickPick(
                     ['claude-code', 'cursor', 'gemini', 'codex', 'opencode', 'copilot'],
-                    { placeHolder: 'Select target harness' }
+                    {
+                        placeHolder: 'Select target harness',
+                        // Pre-select the default harness if it's in the list
+                    }
                 );
 
                 if (harness && vscode.workspace.workspaceFolders) {
@@ -84,6 +144,9 @@ export function activate(context: vscode.ExtensionContext) {
 
                         if (selected && selected.length > 0) {
                             const pluginNames = selected.map(item => item.label);
+                            const config = vscode.workspace.getConfiguration('agenticq');
+                            const defaultHarness = config.get<string>('defaultHarness', 'claude-code');
+
                             const harness = await vscode.window.showQuickPick(
                                 ['claude-code', 'cursor', 'gemini', 'codex', 'opencode', 'copilot'],
                                 { placeHolder: 'Select target harness' }
