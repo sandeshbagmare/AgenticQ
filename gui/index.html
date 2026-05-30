@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgenticQ Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🤖 AgenticQ Dashboard</h1>
+            <p class="subtitle">Intelligent MCP Plugin Discovery & Agent Scaffolding</p>
+        </header>
+
+        <nav class="tabs">
+            <button class="tab-btn active" data-tab="domains">Domain Explorer</button>
+            <button class="tab-btn" data-tab="plugins">Plugin Browser</button>
+            <button class="tab-btn" data-tab="recommendations">Recommendations</button>
+            <button class="tab-btn" data-tab="scaffold">Scaffold Wizard</button>
+            <button class="tab-btn" data-tab="agent">Agent Builder</button>
+        </nav>
+
+        <!-- Domain Explorer Tab -->
+        <section id="domains" class="tab-content active">
+            <div class="section-header">
+                <h2>Domain Explorer</h2>
+                <p>Explore MCP plugin domains and their capabilities</p>
+            </div>
+            <div id="domain-grid" class="domain-grid">
+                <!-- Domain cards will be inserted here -->
+            </div>
+        </section>
+
+        <!-- Plugin Browser Tab -->
+        <section id="plugins" class="tab-content">
+            <div class="section-header">
+                <h2>Plugin Browser</h2>
+                <div class="controls">
+                    <input type="text" id="plugin-search" placeholder="Search plugins..." class="search-input">
+                    <select id="domain-filter" class="filter-select">
+                        <option value="">All Domains</option>
+                    </select>
+                    <select id="category-filter" class="filter-select">
+                        <option value="">All Categories</option>
+                    </select>
+                </div>
+            </div>
+            <div class="table-container">
+                <table id="plugin-table">
+                    <thead>
+                        <tr>
+                            <th>Plugin Name</th>
+                            <th>Domain</th>
+                            <th>Category</th>
+                            <th>Description</th>
+                            <th>Token Cost</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="plugin-tbody">
+                        <!-- Plugin rows will be inserted here -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Recommendations Tab -->
+        <section id="recommendations" class="tab-content">
+            <div class="section-header">
+                <h2>Plugin Recommendations</h2>
+                <div class="controls">
+                    <input type="text" id="scan-input" placeholder="Describe your project or paste requirements..." class="scan-input">
+                    <button id="scan-btn" class="btn btn-primary">Scan & Recommend</button>
+                </div>
+            </div>
+            <div id="recommendations-container">
+                <div class="empty-state">
+                    <p>Enter your project description above and click "Scan & Recommend" to get personalized plugin suggestions.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Scaffold Wizard Tab -->
+        <section id="scaffold" class="tab-content">
+            <div class="wizard">
+                <div class="wizard-steps">
+                    <div class="step active" data-step="1">
+                        <span class="step-number">1</span>
+                        <span class="step-label">Select Domain</span>
+                    </div>
+                    <div class="step" data-step="2">
+                        <span class="step-number">2</span>
+                        <span class="step-label">Pick Plugins</span>
+                    </div>
+                    <div class="step" data-step="3">
+                        <span class="step-number">3</span>
+                        <span class="step-label">Choose Harness</span>
+                    </div>
+                    <div class="step" data-step="4">
+                        <span class="step-number">4</span>
+                        <span class="step-label">Review</span>
+                    </div>
+                    <div class="step" data-step="5">
+                        <span class="step-number">5</span>
+                        <span class="step-label">Scaffold</span>
+                    </div>
+                </div>
+
+                <div class="wizard-content">
+                    <!-- Step 1: Select Domain -->
+                    <div class="wizard-step-content active" data-step="1">
+                        <h3>Select Domain</h3>
+                        <div id="wizard-domain-grid" class="domain-grid small">
+                            <!-- Domain cards will be inserted here -->
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Pick Plugins -->
+                    <div class="wizard-step-content" data-step="2">
+                        <h3>Pick Plugins</h3>
+                        <div id="wizard-plugin-list" class="plugin-checklist">
+                            <!-- Plugin checkboxes will be inserted here -->
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Choose Harness -->
+                    <div class="wizard-step-content" data-step="3">
+                        <h3>Choose Harness</h3>
+                        <div id="harness-options" class="harness-grid">
+                            <!-- Harness options will be inserted here -->
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Review -->
+                    <div class="wizard-step-content" data-step="4">
+                        <h3>Review Configuration</h3>
+                        <div id="review-content" class="review-panel">
+                            <!-- Review details will be inserted here -->
+                        </div>
+                    </div>
+
+                    <!-- Step 5: Scaffold -->
+                    <div class="wizard-step-content" data-step="5">
+                        <h3>Scaffold Project</h3>
+                        <div id="scaffold-result" class="scaffold-result">
+                            <!-- Scaffold result will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="wizard-actions">
+                    <button id="wizard-prev" class="btn btn-secondary" disabled>Previous</button>
+                    <button id="wizard-next" class="btn btn-primary">Next</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Agent Builder Tab -->
+        <section id="agent" class="tab-content">
+            <div class="section-header">
+                <h2>Agent Builder</h2>
+                <p>Configure runtime agent generation</p>
+            </div>
+            <div class="agent-builder">
+                <div class="form-group">
+                    <label for="agent-name">Agent Name</label>
+                    <input type="text" id="agent-name" placeholder="my-agent" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label for="agent-description">Description</label>
+                    <textarea id="agent-description" placeholder="Describe your agent's purpose..." class="form-textarea"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="agent-plugins">Select Plugins</label>
+                    <div id="agent-plugin-list" class="plugin-checklist">
+                        <!-- Plugin checkboxes will be inserted here -->
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="agent-model">Model</label>
+                    <select id="agent-model" class="form-select">
+                        <option value="claude-3-5-sonnet-20241022">Claude 3.5 Sonnet</option>
+                        <option value="claude-3-opus-20240229">Claude 3 Opus</option>
+                        <option value="gpt-4">GPT-4</option>
+                        <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="agent-temperature">Temperature</label>
+                    <input type="range" id="agent-temperature" min="0" max="1" step="0.1" value="0.7" class="form-range">
+                    <span id="temperature-value">0.7</span>
+                </div>
+                <div class="form-group">
+                    <label for="agent-max-tokens">Max Tokens</label>
+                    <input type="number" id="agent-max-tokens" value="4096" class="form-input">
+                </div>
+                <button id="generate-agent-btn" class="btn btn-primary btn-large">Generate Agent</button>
+                <div id="agent-output" class="output-panel">
+                    <!-- Agent generation output will be inserted here -->
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

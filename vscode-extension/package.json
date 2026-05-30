@@ -1,0 +1,128 @@
+{
+  "name": "agenticq",
+  "displayName": "AgenticQ",
+  "description": "Intelligent Agent Scaffolding Engine for VS Code - Discover and scaffold agents from wshobson/agents marketplace",
+  "version": "0.1.0",
+  "publisher": "sandeshbagmare",
+  "author": {
+    "name": "Sandesh Bagmare"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sandeshbagmare/AgenticQ.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sandeshbagmare/AgenticQ/issues"
+  },
+  "homepage": "https://github.com/sandeshbagmare/AgenticQ#readme",
+  "license": "MIT",
+  "icon": "icon.png",
+  "galleryBanner": {
+    "color": "#1e1e1e",
+    "theme": "dark"
+  },
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "keywords": [
+    "agent",
+    "scaffolding",
+    "ai",
+    "claude",
+    "cursor",
+    "productivity",
+    "automation",
+    "cli"
+  ],
+  "categories": [
+    "Other",
+    "Programming Languages",
+    "Snippets"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "agenticq.scaffold",
+        "title": "AgenticQ: Scaffold Plugins"
+      },
+      {
+        "command": "agenticq.recommend",
+        "title": "AgenticQ: Get Recommendations"
+      },
+      {
+        "command": "agenticq.browse",
+        "title": "AgenticQ: Browse Domains"
+      },
+      {
+        "command": "agenticq.openWebview",
+        "title": "AgenticQ: Open Dashboard"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "agenticq-explorer",
+          "title": "AgenticQ",
+          "icon": "resources/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "agenticq-explorer": [
+        {
+          "id": "agenticqDomains",
+          "name": "Domains"
+        },
+        {
+          "id": "agenticqPlugins",
+          "name": "Plugins"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "AgenticQ",
+      "properties": {
+        "agenticq.pythonPath": {
+          "type": "string",
+          "default": "python",
+          "description": "Path to the Python interpreter used to run the AgenticQ CLI"
+        },
+        "agenticq.autoRecommend": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically run recommendations when a project is opened"
+        },
+        "agenticq.defaultHarness": {
+          "type": "string",
+          "default": "claude-code",
+          "enum": [
+            "claude-code",
+            "cursor",
+            "gemini",
+            "codex",
+            "opencode",
+            "copilot"
+          ],
+          "description": "Default target harness for scaffolding plugins"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "@types/vscode": "^1.80.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {}
+}

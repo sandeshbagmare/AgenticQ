@@ -1,0 +1,220 @@
+{
+  "version": "1.0.0",
+  "domains": [
+    {
+      "domain_id": "python-development",
+      "display_name": "Python Development",
+      "description": "Modern Python development with FastAPI, Django, async patterns, and production best practices",
+      "icon": "🐍",
+      "plugins": ["python-development", "unit-testing", "tdd-workflows", "code-refactoring"],
+      "file_detection_heuristics": [
+        "pyproject.toml",
+        "setup.py",
+        "requirements.txt",
+        "Pipfile",
+        "poetry.lock",
+        "*.py"
+      ],
+      "recommended_combinations": [
+        ["python-development", "unit-testing"],
+        ["python-development", "code-refactoring"],
+        ["python-development", "tdd-workflows"]
+      ]
+    },
+    {
+      "domain_id": "javascript-typescript",
+      "display_name": "JavaScript/TypeScript",
+      "description": "Modern JavaScript and TypeScript development with React, Node.js, and web frameworks",
+      "icon": "⚡",
+      "plugins": ["javascript-typescript", "frontend-mobile-development", "ui-design"],
+      "file_detection_heuristics": [
+        "package.json",
+        "tsconfig.json",
+        "*.ts",
+        "*.tsx",
+        "*.js",
+        "*.jsx"
+      ],
+      "recommended_combinations": [
+        ["javascript-typescript", "frontend-mobile-development"],
+        ["javascript-typescript", "ui-design"]
+      ]
+    },
+    {
+      "domain_id": "backend-apis",
+      "display_name": "Backend & APIs",
+      "description": "Backend API design, GraphQL, REST, and microservices architecture",
+      "icon": "🔌",
+      "plugins": ["backend-development", "api-scaffolding", "api-testing-observability", "backend-api-security"],
+      "file_detection_heuristics": [
+        "openapi.yaml",
+        "swagger.json",
+        "graphql.schema",
+        "*.graphql"
+      ],
+      "recommended_combinations": [
+        ["backend-development", "api-testing-observability"],
+        ["backend-development", "backend-api-security"],
+        ["api-scaffolding", "api-testing-observability"]
+      ]
+    },
+    {
+      "domain_id": "devops-cloud",
+      "display_name": "DevOps & Cloud",
+      "description": "Cloud infrastructure, Kubernetes, CI/CD, and deployment automation",
+      "icon": "☁️",
+      "plugins": ["cloud-infrastructure", "kubernetes-operations", "cicd-automation", "deployment-strategies"],
+      "file_detection_heuristics": [
+        "Dockerfile",
+        "docker-compose.yml",
+        "terraform/*.tf",
+        "k8s/*.yaml",
+        ".github/workflows/*.yml",
+        ".gitlab-ci.yml",
+        "Jenkinsfile"
+      ],
+      "recommended_combinations": [
+        ["cloud-infrastructure", "kubernetes-operations"],
+        ["cicd-automation", "deployment-strategies"],
+        ["kubernetes-operations", "observability-monitoring"]
+      ]
+    },
+    {
+      "domain_id": "security",
+      "display_name": "Security",
+      "description": "Security scanning, compliance, penetration testing, and secure coding practices",
+      "icon": "🔒",
+      "plugins": ["security-scanning", "security-compliance", "backend-api-security", "frontend-mobile-security"],
+      "file_detection_heuristics": [
+        ".snyk",
+        "sonar-project.properties",
+        "security-policy.md"
+      ],
+      "recommended_combinations": [
+        ["security-scanning", "security-compliance"],
+        ["backend-api-security", "security-scanning"],
+        ["frontend-mobile-security", "security-scanning"]
+      ]
+    },
+    {
+      "domain_id": "data-ml",
+      "display_name": "Data & ML",
+      "description": "Data engineering, machine learning, MLOps, and AI application development",
+      "icon": "🤖",
+      "plugins": ["data-engineering", "machine-learning-ops", "llm-application-dev", "business-analytics"],
+      "file_detection_heuristics": [
+        "requirements.txt",
+        "environment.yml",
+        "*.ipynb",
+        "mlflow.yaml",
+        "dvc.yaml"
+      ],
+      "recommended_combinations": [
+        ["machine-learning-ops", "data-engineering"],
+        ["llm-application-dev", "machine-learning-ops"]
+      ]
+    },
+    {
+      "domain_id": "documentation",
+      "display_name": "Documentation",
+      "description": "Technical documentation, API docs, architecture diagrams, and content generation",
+      "icon": "📚",
+      "plugins": ["documentation-standards", "code-documentation", "documentation-generation", "c4-architecture"],
+      "file_detection_heuristics": [
+        "docs/",
+        "README.md",
+        "CONTRIBUTING.md",
+        "*.md"
+      ],
+      "recommended_combinations": [
+        ["documentation-standards", "code-documentation"],
+        ["documentation-generation", "c4-architecture"]
+      ]
+    },
+    {
+      "domain_id": "testing-qa",
+      "display_name": "Testing & QA",
+      "description": "Unit testing, integration testing, TDD, performance testing, and quality assurance",
+      "icon": "✅",
+      "plugins": ["unit-testing", "tdd-workflows", "performance-testing-review", "data-validation-suite"],
+      "file_detection_heuristics": [
+        "pytest.ini",
+        "jest.config.js",
+        "test/",
+        "tests/",
+        "*.test.ts",
+        "*.spec.ts"
+      ],
+      "recommended_combinations": [
+        ["unit-testing", "tdd-workflows"],
+        ["performance-testing-review", "unit-testing"]
+      ]
+    },
+    {
+      "domain_id": "systems-programming",
+      "display_name": "Systems Programming",
+      "description": "Low-level programming with Rust, Go, C, C++, and embedded systems",
+      "icon": "⚙️",
+      "plugins": ["systems-programming", "shell-scripting", "arm-cortex-microcontrollers"],
+      "file_detection_heuristics": [
+        "Cargo.toml",
+        "go.mod",
+        "CMakeLists.txt",
+        "Makefile",
+        "*.rs",
+        "*.go",
+        "*.c",
+        "*.cpp"
+      ],
+      "recommended_combinations": [
+        ["systems-programming", "shell-scripting"]
+      ]
+    },
+    {
+      "domain_id": "business-marketing",
+      "display_name": "Business & Marketing",
+      "description": "Business analytics, SEO, content marketing, and startup operations",
+      "icon": "📈",
+      "plugins": ["business-analytics", "seo-analysis-monitoring", "seo-content-creation", "content-marketing", "startup-business-analyst"],
+      "file_detection_heuristics": [],
+      "recommended_combinations": [
+        ["seo-content-creation", "seo-analysis-monitoring"],
+        ["business-analytics", "startup-business-analyst"]
+      ]
+    },
+    {
+      "domain_id": "agent-orchestration",
+      "display_name": "Agent Orchestration",
+      "description": "Multi-agent systems, agent teams, context management, and workflow orchestration",
+      "icon": "🎭",
+      "plugins": ["agent-orchestration", "agent-teams", "conductor", "context-management"],
+      "file_detection_heuristics": [
+        ".claude/",
+        ".cursor/",
+        "CLAUDE.md"
+      ],
+      "recommended_combinations": [
+        ["agent-orchestration", "context-management"],
+        ["agent-teams", "conductor"]
+      ]
+    },
+    {
+      "domain_id": "specialized",
+      "display_name": "Specialized",
+      "description": "Blockchain, game development, quantitative trading, payments, and niche domains",
+      "icon": "🎯",
+      "plugins": ["blockchain-web3", "game-development", "quantitative-trading", "payment-processing", "reverse-engineering"],
+      "file_detection_heuristics": [
+        "hardhat.config.js",
+        "truffle-config.js",
+        "*.sol",
+        "Unity/",
+        "*.unity"
+      ],
+      "recommended_combinations": [
+        ["blockchain-web3", "security-scanning"],
+        ["payment-processing", "backend-api-security"]
+      ]
+    }
+  ]
+}
