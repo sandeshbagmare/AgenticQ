@@ -71,7 +71,7 @@ export function activate(context: vscode.ExtensionContext) {
                     const recommendations = await pythonBridge?.recommend(targetDir);
 
                     if (recommendations && recommendations.length > 0) {
-                        const items = recommendations.map((rec: any) => ({
+                        const items: vscode.QuickPickItem[] = recommendations.map((rec: any) => ({
                             label: rec.plugin_name,
                             description: `Score: ${rec.relevance_score.toFixed(1)} | Tokens: ${rec.token_cost_estimate}`,
                             detail: rec.reason
@@ -83,8 +83,20 @@ export function activate(context: vscode.ExtensionContext) {
                         });
 
                         if (selected && selected.length > 0) {
-                            const pluginNames = selected.map(s => s.label);
-                            vscode.commands.executeCommand('agenticq.scaffold');
+                            const pluginNames = selected.map(item => item.label);
+                            const harness = await vscode.window.showQuickPick(
+                                ['claude-code', 'cursor', 'gemini', 'codex', 'opencode', 'copilot'],
+                                { placeHolder: 'Select target harness' }
+                            );
+
+                            if (harness) {
+                                const result = await pythonBridge?.scaffold(pluginNames, harness, targetDir);
+                                if (result?.success) {
+                                    vscode.window.showInformationMessage(`✓ ${result.message}`);
+                                } else {
+                                    vscode.window.showErrorMessage(`✗ ${result?.message || 'Scaffolding failed'}`);
+                                }
+                            }
                         }
                     } else {
                         vscode.window.showInformationMessage('No recommendations found');

@@ -54,6 +54,8 @@ htmlcov/
 # Project specific
 src/agenticq/data/catalog.json
 .claude/
+!examples/**/.claude/
+!examples/**/.claude/**
 
 # Node modules (for VS Code extension)
 node_modules/

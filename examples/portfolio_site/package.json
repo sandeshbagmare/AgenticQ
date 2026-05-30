@@ -1,0 +1,9 @@
+{
+  "name": "portfolio-site",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Static portfolio demo for AgenticQ testing",
+  "scripts": {
+    "start": "npx serve ."
+  }
+}
