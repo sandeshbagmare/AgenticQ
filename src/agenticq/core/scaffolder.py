@@ -42,6 +42,10 @@ class Scaffolder:
                 False, f"Unknown harness: {harness}. Supported: {list(harness_methods.keys())}"
             )
 
+        unknown_plugins = [name for name in plugin_names if name not in self.catalog_plugins]
+        if unknown_plugins:
+            return ScaffoldResult(False, f"Unknown plugins: {', '.join(unknown_plugins)}")
+
         return method(plugin_names, target_dir)
 
     def scaffold_claude_code(
