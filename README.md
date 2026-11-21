@@ -1,5 +1,7 @@
 # AgenticQ — Intelligent Agent Scaffolding Engine
 
+[![Tests](https://github.com/sandeshbagmare/AgenticQ/actions/workflows/tests.yml/badge.svg?branch=main&event=push)](https://github.com/sandeshbagmare/AgenticQ/actions/workflows/tests.yml)
+
 > Build smarter with curated agents from the [wshobson/agents](https://github.com/wshobson/agents) marketplace
 
 ## What is AgenticQ?
