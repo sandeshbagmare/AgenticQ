@@ -28,13 +28,7 @@ class JSONRPCServer:
             return self._catalog_cache
 
         if not self.catalog_path.exists():
-            return {
-                "jsonrpc": "2.0",
-                "error": {
-                    "code": -32603,
-                    "message": "Catalog not found. Run 'agenticq update' first."
-                }
-            }
+            raise FileNotFoundError("Catalog not found. Run 'agenticq update' first.")
 
         self._catalog_cache = json.loads(self.catalog_path.read_text(encoding='utf-8'))
         return self._catalog_cache
@@ -45,13 +39,7 @@ class JSONRPCServer:
             return self._taxonomy_cache
 
         if not self.taxonomy_path.exists():
-            return {
-                "jsonrpc": "2.0",
-                "error": {
-                    "code": -32603,
-                    "message": "Taxonomy not found. Run 'agenticq update' first."
-                }
-            }
+            raise FileNotFoundError("Taxonomy not found. Run 'agenticq update' first.")
 
         self._taxonomy_cache = json.loads(self.taxonomy_path.read_text(encoding='utf-8'))
         return self._taxonomy_cache
